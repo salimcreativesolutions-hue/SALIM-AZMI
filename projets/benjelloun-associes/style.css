@@ -1,0 +1,36 @@
+/* Benjelloun & Associés — case study page (page-specific styles only).
+   Everything is scoped to .case-benjelloun; the header, footer, cursor and base styles come from the site.
+   Fonts: TT Firs Neue (titles) and TT Hoves Pro (text), trial versions, for local use only:
+   buy the licences before putting the site online. */
+@font-face{font-family:'TT Firs Neue';font-weight:400;src:url(assets/fonts/firs-400.ttf) format('truetype');font-display:swap}
+@font-face{font-family:'TT Firs Neue';font-weight:500;src:url(assets/fonts/firs-500.ttf) format('truetype');font-display:swap}
+@font-face{font-family:'TT Hoves Pro';font-weight:400;src:url(assets/fonts/hoves-400.ttf) format('truetype');font-display:swap}
+@font-face{font-family:'TT Hoves Pro';font-weight:400;font-style:italic;src:url(assets/fonts/hoves-400-italic.ttf) format('truetype');font-display:swap}
+@font-face{font-family:'TT Hoves Pro';font-weight:500;src:url(assets/fonts/hoves-500.ttf) format('truetype');font-display:swap}
+
+.case-benjelloun{
+  --cloud:#E1E4EB;
+  --haze:#D5D8DF;    /* lines */
+  --slate:#6B6F78;   /* secondary text */
+  --ink:#0B0C0E;     /* main text */
+  --title:'TT Firs Neue','Helvetica Neue',Arial,sans-serif;
+  --sans:'TT Hoves Pro','Helvetica Neue',Arial,sans-serif;
+  --gutter:24px;
+  --gap:10px;
+  color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;
+}
+.case-benjelloun img,.case-benjelloun video{display:block;width:100%;height:auto;max-width:100%}
+
+/* hero */
+
+/* info */
+
+/* slides: 10px edges and gaps, like the homepage grid */
+.case-benjelloun .slides{display:flex;flex-direction:column;gap:var(--gap);padding:0 var(--gap)}
+.case-benjelloun .slides img,.case-benjelloun .slides video{aspect-ratio:2880/1834;object-fit:cover;background:var(--cloud)}
+
+/* next project */
+
+@media (max-width:900px){
+}
+@media (prefers-reduced-motion:reduce){.case-benjelloun .next-arrow{transition:none}}

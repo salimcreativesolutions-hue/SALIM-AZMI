@@ -1,0 +1,68 @@
+// First scroll = zoom out, second scroll = the page moves. Back at the top, the hero zooms in again.
+(function () {
+  var html = document.documentElement;
+  if (innerWidth < 900) { html.classList.remove('cz-intro', 'cz-lock'); return; }
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var busy = false, armed = false, away = false, startY = 0;
+
+  function release() {
+    html.classList.remove('cz-lock', 'cz-again');
+    ['wheel', 'touchstart', 'touchmove', 'keydown'].forEach(function (t) { removeEventListener(t, handlers[t]); });
+    armed = false;
+    busy = false;
+  }
+  function go() {
+    if (busy) return;
+    busy = true;
+    html.classList.remove('cz-intro');          // image eases from full-screen to its framed size
+    setTimeout(release, 1200);
+  }
+  var handlers = {
+    wheel: function (e) { e.preventDefault(); if (e.deltaY > 0) go(); },
+    touchstart: function (e) { startY = e.touches[0].clientY; },
+    touchmove: function (e) { e.preventDefault(); if (startY - e.touches[0].clientY > 12) go(); },
+    keydown: function (e) {
+      if (['ArrowDown', 'PageDown', ' ', 'End', 'Spacebar'].indexOf(e.key) < 0) return;
+      e.preventDefault(); go();
+    }
+  };
+  function arm() {
+    if (armed) return;
+    armed = true;
+    addEventListener('wheel', handlers.wheel, { passive: false });
+    addEventListener('touchstart', handlers.touchstart, { passive: true });
+    addEventListener('touchmove', handlers.touchmove, { passive: false });
+    addEventListener('keydown', handlers.keydown);
+  }
+  // Back at the top after scrolling away: zoom the hero back in, then wait for the next scroll
+  function rezoom() {
+    if (busy || html.classList.contains('cz-intro')) return;
+    window.czScale && window.czScale();
+    html.classList.add('cz-again', 'cz-lock');
+    void html.offsetWidth;                      // commit the framed state so the zoom animates
+    html.classList.add('cz-intro');
+    arm();
+  }
+  if (html.classList.contains('cz-intro')) arm();
+  addEventListener('scroll', function () {
+    if (scrollY > 60) away = true;
+    else if (away && scrollY <= 1) { away = false; rezoom(); }
+  }, { passive: true });
+  addEventListener('resize', function () { if (html.classList.contains('cz-intro')) window.czScale && window.czScale(); });
+})();
+
+/* Slide lock off once the last slide has been passed (see case-hero.css) */
+(function () {
+  var end = document.querySelector('.case-end');
+  if (!end) return;
+  var root = document.documentElement, ticking = false;
+  function update() {
+    ticking = false;
+    var free = end.getBoundingClientRect().top < window.innerHeight - 4;
+    root.classList.toggle('cz-free', free);
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();

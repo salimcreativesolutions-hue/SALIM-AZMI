@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projets — Salim Azmi</title>
+  <meta name="description" content="Projets de Salim Azmi, designer basé à Casablanca : identités de marque, sites web et supports imprimés, 2022–2026.">
+  <meta name="theme-color" content="#0B0C0E">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="site-footer.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: "#0B0C0E",
+            graphite: "#E1E4EB",
+            charcoal: "#D5D8DF",
+            steel: "#6B6F78",
+            paper: "#E1E4EB",
+          },
+          fontFamily: {
+            sans: ['"Inter Tight"', '"Helvetica Neue"', "Arial", "sans-serif"],
+            mono: ['"Geist Mono"', "ui-monospace", '"SFMono-Regular"', "monospace"],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { background: #FFFFFF; color: #0B0C0E; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    body { font-family: "Inter Tight", "Helvetica Neue", Arial, sans-serif; }
+    ::selection { background: #0B0C0E; color: #FFFFFF; }
+    a:focus-visible, button:focus-visible { outline: 1px solid currentColor; outline-offset: 4px; }
+
+    /* Label style, used everywhere */
+    .label { font-family: "Geist Mono", ui-monospace, "SFMono-Regular", monospace; font-weight: 400;
+             font-size: 12px; line-height: 16px; text-transform: uppercase; letter-spacing: 0.04em; color: #6B6F78; }
+    .mono-row { font-family: "Geist Mono", ui-monospace, "SFMono-Regular", monospace; font-size: 13px; line-height: 18px;
+                text-transform: uppercase; letter-spacing: 0.02em; }
+
+    /* Fixed header: inverts against whatever is behind it */
+    .site-header { mix-blend-mode: difference; color: #FFFFFF; pointer-events: none; }
+    .site-header a, .site-header button { pointer-events: auto; }
+
+    /* Header hides once the footer covers more than half the screen */
+    .hdr { transition: opacity .45s cubic-bezier(.22, 1, .36, 1), transform .45s cubic-bezier(.22, 1, .36, 1); }
+    .hdr.hide { opacity: 0; transform: translateY(-16px); }
+    .hdr.hide * { pointer-events: none; }
+
+    /* Hero: sticky so the content slides over it */
+    .hero { position: sticky; top: 0; z-index: 0; height: 100vh; min-height: 560px; max-height: 1400px;
+            transform-origin: center top; }
+
+    /* Hero name: fit() sets the exact size; this is the fallback before it runs */
+    .hero-name { font-size: calc((100vw - 48px) / 5.05); font-weight: 500; line-height: 0.8;
+                 letter-spacing: -0.035em; white-space: nowrap; padding-top: 0.12em; }
+
+    /* Brandmark hover */
+    .bm { display: flex; width: fit-content; transform-origin: left center;
+          transition: transform .35s cubic-bezier(.22, 1, .36, 1); }
+    .bm:hover, .bm:focus-visible { transform: scale(1.12); }
+
+    /* Slot-machine roll: --lh is the line height of the link */
+    .roll { --lh: 22px; }
+    .roll .w { display: inline-flex; overflow: hidden; height: var(--lh); line-height: var(--lh); }
+    .roll .l { display: inline-block; text-shadow: 0 var(--lh) 0 currentColor;
+               transition: transform .45s cubic-bezier(.65, 0, .35, 1); transition-delay: calc(var(--i) * 25ms); }
+    .roll:hover .l, .roll:focus-visible .l { transform: translateY(calc(var(--lh) * -1)); }
+
+    /* Projects: 10px frame and gaps */
+    .blocks { display: flex; flex-direction: column; gap: 10px; padding: 10px; }
+    .row { --p: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .tile { position: relative; display: block; overflow: hidden; aspect-ratio: 86 / 100; color: #0B0C0E; }
+    .tile.full { grid-column: 1 / -1; aspect-ratio: 157 / 100; }
+    .tile .bg { position: absolute; inset: 0; }
+    /* Scroll-linked: JS sets --p on each row (0 = centre, 1 = bottom), no transition */
+    .tile .info { position: absolute; left: 24px; right: 24px;
+                  top: calc(50% + (50% - 24px) * var(--p)); transform: translateY(calc(-50% - 50% * var(--p)));
+                  display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+    /* Photo tiles: name is hidden (the link keeps its aria-label) */
+    .tile.no-label .info { display: none; }
+    /* Blocks with a photo: image fills the background layer, text turns white */
+    .tile .bg img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .tile.has-img { color: #FFFFFF; }
+    /* Video block: fills the background layer; light labels over the black video */
+    .tile .bg video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; }
+    .tile.on-dark { color: #EEF5F7; }
+    .tile:focus-visible { outline: 1px solid #0B0C0E; outline-offset: 3px; }
+
+    /* "Voir tous les projets": 10px frame + 14px padding = 24px page edge */
+    .see-all { display: flex; align-items: center; justify-content: space-between; padding: 56px 14px 8px; margin-top: -10px; color: #0B0C0E; } /* cancel the 10px row gap */
+    .see-all-arrow { transition: transform .45s cubic-bezier(.65, 0, .35, 1); }
+    .see-all:hover .see-all-arrow, .see-all:focus-visible .see-all-arrow { transform: translateX(8px); }
+    @media (max-width: 759px) {
+      .row { grid-template-columns: 1fr; }
+      .tile, .tile.full { aspect-ratio: 4 / 5; }
+    }
+
+    /* Sections after the projects: 12-column grid; everything stacks under 900px */
+    .sec { padding: 160px 24px 0; }
+    .sec-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+    .sec-label, .col-1-3 { grid-column: 1 / 4; }
+    .col-1-4 { grid-column: 1 / 5; }
+    .sec-body, .col-5-12 { grid-column: 5 / 13; }
+    .col-7-12 { grid-column: 7 / 13; }
+    @media (max-width: 899px) {
+      .sec { padding-top: 96px; }
+      .sec-grid { grid-template-columns: 1fr; row-gap: 24px; }
+      .sec-label, .sec-body, .col-1-3, .col-1-4, .col-5-12, .col-7-12 { grid-column: 1 / -1; }
+    }
+
+    /* Outline button */
+    .btn-outline { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border: 1px solid #FFFFFF;
+                   font-size: 16px; line-height: 20px; transition: background-color .3s ease, color .3s ease; }
+    .btn-outline:hover, .btn-outline:focus-visible { background: #FFFFFF; color: #0B0C0E; }
+
+    /* Projects page: title marquee cut at 0.7em, then a 3 / 2 / 1 column grid */
+    /* Sized in em so the spacing scales with the title: ~1em of space above, letters end just above the grid */
+    .ptitle { font-size: 17.8vw; margin-top: 0.966em; height: 0.929em; overflow: hidden; }
+    .pgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 0 10px 10px; }
+    .pgrid .tile { --p: 0; aspect-ratio: 86 / 100; }
+    .pgrid .tile .info { left: 20px; right: 20px; }
+    @media (max-width: 899px) { .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 599px) { .pgrid { grid-template-columns: 1fr; } }
+
+
+    /* Projects page, clean 4-column grid */
+    .pw-title { font-weight: 500; text-transform: uppercase; letter-spacing: -0.04em; text-align: center;
+                font-size: 6.2vw; padding: 11vw 1.5vw 3.5vw; margin: 0; line-height: 1; }
+    .pw-title { cursor: default; white-space: nowrap; }
+    .pw-title .ch { display: inline-block; transform-origin: 50% 60%;
+                    transition: transform .8s cubic-bezier(.34, 1.45, .64, 1); transition-delay: calc(var(--i) * 30ms); }
+    .pw-title:hover .ch { transform: translate(var(--x), var(--y)) rotate(var(--r)); }
+    @media (prefers-reduced-motion: reduce) { .pw-title .ch { transition: none; } .pw-title:hover .ch { transform: none; } }
+    .pw-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 10px; row-gap: 5.5vw; padding: 0 1.5vw 6vw; }
+    .pw-item { display: block; color: #0B0C0E; text-decoration: none; }
+    .pw-img { position: relative; overflow: hidden; aspect-ratio: 485 / 715; }
+    .pw-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+                  transition: transform 1.6s cubic-bezier(.16, 1, .3, 1); will-change: transform; }
+    @media (hover: hover) { .pw-item:hover .pw-img img { transform: scale(1.07); } }
+    .pw-cap { --r: 1; display: flex; flex-direction: column; gap: 3px; padding-top: 12px;
+              font-size: max(12px, .75vw); line-height: 1.25; text-transform: uppercase;
+              opacity: var(--r); transform: translateY(calc((1 - var(--r)) * 14px)); }
+    .pw-name { color: #0B0C0E; font-weight: 500; letter-spacing: .01em; }
+    .pw-tags { color: #8A8E96; }
+    @media (max-width: 899px) { .pw-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 8vw; } .pw-cap { font-size: 12px; } }
+    @media (max-width: 599px) { .pw-grid { grid-template-columns: minmax(0, 1fr); row-gap: 10vw; } }
+    @media (prefers-reduced-motion: reduce) { .pw-img img { transition: none; } .pw-cap { opacity: 1 !important; transform: none !important; } }
+
+    /* Footer small text */
+    #contact .label { color: #5A5E66; }
+
+    /* Footer marquee: two identical groups, moving left to right */
+    .mq-track { display: flex; width: max-content; white-space: nowrap; animation: mq 55s linear infinite; }
+    .mq-dot { display: inline-block; width: 0.15em; height: 0.15em; border-radius: 50%; background: currentColor;
+              margin: 0 0.32em; vertical-align: middle; }
+    @keyframes mq { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+    /* Mobile menu */
+    .menu-mobile { opacity: 0; pointer-events: none; transition: opacity 300ms cubic-bezier(.22, 1, .36, 1); }
+    .menu-mobile.is-open { opacity: 1; pointer-events: auto; }
+
+    /* Custom cursor (mouse devices only, enabled by JS): a fast dot and a slow trailing disc layered above it */
+    .cursor-dot, .cursor-disc { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none;
+                                opacity: 0; transition: opacity .25s ease; will-change: transform; }
+    .cursor-dot { z-index: 60; width: 28px; height: 28px; margin: -14px 0 0 -14px; background: #FFFFFF; mix-blend-mode: difference; backface-visibility: hidden; }
+    .cursor-disc { z-index: 61; width: 30px; height: 30px; margin: -15px 0 0 -15px; background: #ADB0B7; mix-blend-mode: multiply; }
+    .cursor-dot.is-visible, .cursor-disc.is-visible { opacity: 1; }
+    html.has-dot, html.has-dot * { cursor: none !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .bm, .roll .l, .btn-outline, .menu-mobile, .hdr, .see-all-arrow { transition: none; }
+      .mq-track { animation: none; }
+    }
+  </style>
+  <link rel="stylesheet" href="site-nav.css">
+  <link rel="stylesheet" href="reveal.css">
+</head>
+
+<body class="bg-[#FFFFFF] text-ink font-sans">
+  <!-- Logo sprite: path copied from brandmark.svg -->
+  <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+    <symbol id="brandmark" viewBox="362 334 276 294">
+      <path d="M628.1,609.86c-16.04,6.18-31.49,6.99-46.98,2.74-15.17-4.16-24.13-16.37-26.87-32.52-36,35.71-101.73,49.67-146.49,25.61-21.83-11.73-32.89-32.18-35.4-56.47-3.71-35.81,15.36-68.65,50.03-80.61,11.93-4.12,24.67-6.8,37.57-8.45l75.63-9.66c12.18-1.56,17.75-12.11,19.17-23.02,2.37-18.21-5.64-33.93-23.88-40.39-19.79-7.01-42.97-7.24-64.06-3.08-23.06,4.55-36.5,23.29-38.53,46.98l-42.22.08c-.98-29.23,11.3-55.99,36.15-70.68,20.46-12.09,43.12-14.83,66.57-15.8,27.86-1.15,54.79,2.72,77.79,17.82,23.47,15.41,34.41,39.34,31.38,66.94-3.06,27.91-21,48.75-49.26,54.39-22.53,4.5-45.29,7.72-68.47,10.94-13.41,1.86-26.64,4.03-38.48,9.41-17.22,7.82-24.08,23.63-21.33,41.54,2.74,17.85,14.44,30.64,32.74,33.42,37.57,5.72,89.05-10.09,98.18-53.29l46.8-.56.26,39.51c.02,3.27,1.51,9.65,3.8,11.49,2.46,1.97,8.17,2.99,11.55,2.89l14.28-.42.06,31.18Z"/>
+    </symbol>
+  </svg>
+
+  <!-- Fixed header -->
+  <header class="site-header hdr fixed top-0 inset-x-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center px-6 py-5">
+    <a href="index.html" class="bm justify-self-start" aria-label="Salim Azmi, accueil">
+      <svg class="block h-11 w-auto aspect-[276/294]" fill="currentColor" aria-hidden="true"><use href="#brandmark"/></svg>
+    </a>
+    <nav class="hidden md:block" aria-label="Menu principal">
+      <ul class="flex items-center gap-3.5 text-base leading-[22px]">
+        <li><a class="roll" href="index.html">Accueil</a></li>
+        <li><a class="roll" href="#top" aria-current="page">Projets</a></li>
+        <li><a class="roll" href="index.html#a-propos">À propos</a></li>
+      </ul>
+    </nav>
+    <button type="button" class="md:hidden text-base leading-[22px]" aria-expanded="false" aria-controls="menu-mobile" data-menu-toggle>Menu</button>
+    <a class="roll justify-self-end text-base leading-[22px]" href="contact.html">Parlons-en</a>
+  </header>
+
+  <!-- Mobile menu (outside the blended header so it stays solid black) -->
+  <div id="menu-mobile" class="menu-mobile fixed inset-0 z-[55] bg-ink text-white md:hidden flex flex-col px-6 py-5" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="grid grid-cols-[1fr_auto_1fr] items-center">
+      <svg class="block h-11 w-auto aspect-[276/294]" fill="currentColor" aria-hidden="true"><use href="#brandmark"/></svg>
+      <button type="button" class="text-base leading-[22px]" data-menu-close>Fermer</button>
+      <span></span>
+    </div>
+    <nav class="flex-1 flex items-end pb-1" aria-label="Menu mobile">
+      <ul class="text-5xl leading-[1.1] tracking-[-0.03em] font-medium">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="#top" aria-current="page">Projets</a></li>
+        <li><a href="index.html#a-propos">À propos</a></li>
+        <li><a href="contact.html">Parlons-en</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- main sits above the sticky footer; its black background keeps the footer hidden until main scrolls away -->
+  <!-- main sits above the sticky footer; its black background keeps the footer hidden until main scrolls away -->
+  <main id="top" class="relative z-[1] bg-[#FFFFFF]">
+    <h1 class="pw-title" aria-label="Projets"><span class="ch" aria-hidden="true" style="--i:0;--x:0;--y:6%;--r:-14deg">(</span><span class="ch" aria-hidden="true" style="--i:1;--x:0;--y:-30%;--r:8deg">P</span><span class="ch" aria-hidden="true" style="--i:2;--x:0;--y:14%;--r:-10deg">r</span><span class="ch" aria-hidden="true" style="--i:3;--x:0;--y:-16%;--r:12deg">o</span><span class="ch" aria-hidden="true" style="--i:4;--x:0;--y:24%;--r:-7deg">j</span><span class="ch" aria-hidden="true" style="--i:5;--x:-6%;--y:-22%;--r:10deg">e</span><span class="ch" aria-hidden="true" style="--i:6;--x:18%;--y:12%;--r:-9deg">t</span><span class="ch" aria-hidden="true" style="--i:7;--x:0;--y:-18%;--r:11deg">s</span><span class="ch" aria-hidden="true" style="--i:8;--x:10%;--y:20%;--r:-12deg">)</span></h1>
+
+    <section class="pw-grid" aria-label="Tous les projets">
+      <a class="pw-item" href="projets/shams/">
+        <div class="pw-img" style="background:#1B2E9E"><img src="projets/shams/assets/img/card.webp" width="1440" height="1928" alt="" loading="lazy" decoding="async"></div>
+        <div class="pw-cap"><span class="pw-name">Shams</span><span class="pw-tags">Énergie solaire, Identité visuelle, Motion</span></div>
+      </a>
+      <a class="pw-item" href="projets/zenith/">
+        <div class="pw-img" style="background:#F3F0EC"><img src="projets/zenith/assets/img/card.webp" width="1440" height="1928" alt="" loading="lazy" decoding="async"></div>
+        <div class="pw-cap"><span class="pw-name">zenith®</span><span class="pw-tags">Fiduciaire, Identité visuelle, Motion</span></div>
+      </a>
+      <a class="pw-item" href="projets/benjelloun-associes/">
+        <div class="pw-img" style="background:#EEF2FA"><img src="projets/benjelloun-associes/assets/img/card.webp" width="1440" height="1929" alt="" loading="lazy" decoding="async"></div>
+        <div class="pw-cap"><span class="pw-name">Benjelloun &amp; Associés</span><span class="pw-tags">Cabinet d'avocats, Identité visuelle, Motion</span></div>
+      </a>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="sf" id="contact">
+    <div class="sf-top">
+      <div class="sf-contact">
+        <h2 class="sf-title" tabindex="0">Parlons-en</h2>
+        <ul class="sf-list">
+          <li><a href="mailto:hello@salimazmi.com">hello@salimazmi.com</a></li>
+          <li><a href="tel:+212600000000">+212 6 00 00 00 00</a></li>
+          <li><a href="demarrer.html">Prendre rendez-vous</a></li>
+        </ul>
+      </div>
+      <div class="sf-note">
+        <p class="sf-q">Un nouveau projet en tête&#8239;?</p>
+        <p>Je suis toujours ouvert à de nouveaux projets et à des collaborations avec des entreprises engagées. Écrivez-moi quelques lignes : nous verrons ensemble comment avancer.</p>
+      </div>
+    </div>
+    <div class="sf-bottom">
+      <nav class="sf-pills" aria-label="Contact et liens">
+        <a href="mailto:hello@salimazmi.com">hello@salimazmi.com</a>
+        <a href="tel:+212600000000">+212 6 00 00 00 00</a>
+        <a href="https://wa.me/212XXXXXXXXX" target="_blank" rel="noopener">WhatsApp</a>
+        <span class="sf-br"></span>
+        <a href="demarrer.html">Démarrer un projet</a>
+        <a href="index.html">Accueil</a>
+        <a href="projets.html">Projets</a>
+        <a href="index.html#a-propos">À propos</a>
+        <span class="sf-br"></span>
+        <a href="#" target="_blank" rel="noopener">Instagram</a>
+        <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="#" target="_blank" rel="noopener">Behance</a>
+      </nav>
+      <div class="sf-sign">
+        <a class="sf-brand" href="index.html" aria-label="Salim Azmi, accueil">Salim Azmi</a>
+        <p class="sf-time"><span id="sf-clock">--:--:--</span><br>Casablanca, Maroc</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="cursor-disc" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <script>
+    /* Captions appear progressively as each image's bottom rises into view */
+    (function () {
+      var caps = Array.prototype.slice.call(document.querySelectorAll(".pw-cap"));
+      var items = caps.map(function (c) { return c.previousElementSibling; });
+      var tick = false;
+      function update() {
+        tick = false;
+        var vh = window.innerHeight;
+        for (var i = 0; i < caps.length; i++) {
+          var b = items[i].getBoundingClientRect().bottom;
+          var p = (vh * 0.97 - b) / (vh * 0.3);
+          caps[i].style.setProperty("--r", Math.max(0, Math.min(1, p)).toFixed(3));
+        }
+      }
+      function req() { if (!tick) { tick = true; requestAnimationFrame(update); } }
+      window.addEventListener("scroll", req, { passive: true });
+      window.addEventListener("resize", req);
+      update();
+    })();
+  </script>
+  <script>
+    (function () {
+      var el = document.getElementById("sf-clock"); if (!el) return;
+      function tick() {
+        try {
+          var f = new Intl.DateTimeFormat("fr-FR", { timeZone: "Africa/Casablanca", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZoneName: "shortOffset" });
+          var p = f.formatToParts(new Date()), g = function (t) { return (p.find(function (x) { return x.type === t; }) || {}).value || ""; };
+          el.textContent = g("hour") + ":" + g("minute") + ":" + g("second") + " " + g("timeZoneName").replace("UTC", "GMT");
+        } catch (e) { el.textContent = ""; }
+      }
+      tick(); setInterval(tick, 1000);
+    })();
+  </script>
+  <script src="reveal.js" defer></script>
+    <script src="site.js"></script>
+</body>
+</html>

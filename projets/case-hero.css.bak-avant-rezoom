@@ -1,0 +1,24 @@
+/* Case study hero: full-screen picture first, zooms out on the first scroll.
+   The picture is always laid out at its final size (10px side margins, like the slides);
+   the full-screen state is just that same picture scaled up with transform. */
+.case-hero{position:relative;margin:0;height:100vh;height:100svh;min-height:560px;overflow:hidden;background:#fff}
+.case-hero img{position:absolute;left:50%;top:50%;width:calc(100vw - 20px);max-width:none;height:auto;aspect-ratio:2880/1834;object-fit:cover;
+  transform:translate(-50%,-50%) scale(1);transition:transform 1.15s cubic-bezier(.65,0,.35,1);will-change:transform}
+html.cz-intro .case-hero img{transform:translate(-50%,-50%) scale(var(--s0,1));transition:none}
+html.cz-lock{overflow:hidden;overscroll-behavior:none}
+@media (prefers-reduced-motion:reduce){.case-hero img{transition:none}}
+
+/* Slide lock (desktop): each slide settles full-screen, one scroll moves to the next.
+   Hero, text, slides, contact block and "next project" are all snap points, so nothing gets skipped or cut. */
+@media (min-width:900px) and (hover:hover) and (prefers-reduced-motion:no-preference){
+  html:has(.case-hero){scroll-snap-type:y mandatory}
+  .case-hero{scroll-snap-align:start}
+  .case-info{scroll-snap-align:start}
+  .slides>img,.slides>video{scroll-snap-align:center;scroll-snap-stop:always}
+  .case-end{scroll-snap-align:start}
+  .case-next{scroll-snap-align:end}
+}
+/* Past the last slide the lock is off, so the contact block and the rest scroll freely */
+@media (min-width:900px) and (hover:hover) and (prefers-reduced-motion:no-preference){
+  html.cz-free:has(.case-hero){scroll-snap-type:none}
+}

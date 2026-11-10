@@ -1,0 +1,48 @@
+// First scroll = zoom out, second scroll = the page moves.
+(function () {
+  var html = document.documentElement;
+  if (!html.classList.contains('cz-intro')) return;
+  var busy = false;
+
+  function release() {
+    html.classList.remove('cz-lock');
+    ['wheel', 'touchstart', 'touchmove', 'keydown'].forEach(function (t) { removeEventListener(t, handlers[t]); });
+  }
+  function go() {
+    if (busy) return;
+    busy = true;
+    html.classList.remove('cz-intro');          // image eases from full-screen to its framed size
+    setTimeout(release, 1200);
+  }
+  var startY = 0;
+  var handlers = {
+    wheel: function (e) { e.preventDefault(); if (e.deltaY > 0) go(); },
+    touchstart: function (e) { startY = e.touches[0].clientY; },
+    touchmove: function (e) { e.preventDefault(); if (startY - e.touches[0].clientY > 12) go(); },
+    keydown: function (e) {
+      if (['ArrowDown', 'PageDown', ' ', 'End', 'Spacebar'].indexOf(e.key) < 0) return;
+      e.preventDefault(); go();
+    }
+  };
+  addEventListener('wheel', handlers.wheel, { passive: false });
+  addEventListener('touchstart', handlers.touchstart, { passive: true });
+  addEventListener('touchmove', handlers.touchmove, { passive: false });
+  addEventListener('keydown', handlers.keydown);
+  addEventListener('resize', function () { if (html.classList.contains('cz-intro')) window.czScale && window.czScale(); });
+})();
+
+/* Slide lock off once the last slide has been passed (see case-hero.css) */
+(function () {
+  var end = document.querySelector('.case-end');
+  if (!end) return;
+  var root = document.documentElement, ticking = false;
+  function update() {
+    ticking = false;
+    var free = end.getBoundingClientRect().top < window.innerHeight - 4;
+    root.classList.toggle('cz-free', free);
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();

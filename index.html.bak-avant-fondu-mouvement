@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Salim Azmi — Identité de marque et sites web</title>
+  <meta name="description" content="Designer spécialisé en identité de marque et en sites web, pour les entreprises qui veulent être prêtes dès le premier jour.">
+  <meta name="theme-color" content="#0B0C0E">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="site-footer.css">
+  <link rel="stylesheet" href="home.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: "#0B0C0E",
+            graphite: "#E1E4EB",
+            charcoal: "#D5D8DF",
+            steel: "#6B6F78",
+            paper: "#E1E4EB",
+          },
+          fontFamily: {
+            sans: ['"Inter Tight"', '"Helvetica Neue"', "Arial", "sans-serif"],
+            mono: ['"Geist Mono"', "ui-monospace", '"SFMono-Regular"', "monospace"],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { background: #FFFFFF; color: #0B0C0E; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    body { font-family: "Inter Tight", "Helvetica Neue", Arial, sans-serif; }
+    ::selection { background: #0B0C0E; color: #FFFFFF; }
+    a:focus-visible, button:focus-visible { outline: 1px solid currentColor; outline-offset: 4px; }
+
+    /* Label style, used everywhere */
+    .label { font-family: "Geist Mono", ui-monospace, "SFMono-Regular", monospace; font-weight: 400;
+             font-size: 12px; line-height: 16px; text-transform: uppercase; letter-spacing: 0.04em; color: #6B6F78; }
+    .mono-row { font-family: "Geist Mono", ui-monospace, "SFMono-Regular", monospace; font-size: 13px; line-height: 18px;
+                text-transform: uppercase; letter-spacing: 0.02em; }
+
+    /* Fixed header: inverts against whatever is behind it */
+    .site-header { mix-blend-mode: difference; color: #FFFFFF; pointer-events: none; }
+    .site-header a, .site-header button { pointer-events: auto; }
+
+    /* Header hides once the footer covers more than half the screen */
+    .hdr { transition: opacity .45s cubic-bezier(.22, 1, .36, 1), transform .45s cubic-bezier(.22, 1, .36, 1); }
+    .hdr.hide { opacity: 0; transform: translateY(-16px); }
+    .hdr.hide * { pointer-events: none; }
+
+    /* Hero: sticky so the content slides over it */
+    .hero { position: sticky; top: 0; z-index: 0; height: 100vh; min-height: 560px; max-height: 1400px;
+            transform-origin: center top; }
+
+    /* Hero name: fit() sets the exact size; this is the fallback before it runs */
+    /* Photo hero */
+    .hero { background: #D2D5DC; overflow: hidden; }
+    .hero-img { position: absolute; inset: 0; z-index: 0; display: block; width: 100%; height: 100%;
+                object-fit: cover; object-position: 50% 55%; }
+    /* Moving name: white + difference blend, like the cursor. No wrapper between it and the photo
+       may create an isolated stacking context (isolation, opacity < 1, transform, filter). */
+    .hero-marquee { position: absolute; left: 0; right: 0; bottom: 64px; z-index: 2; overflow: hidden; pointer-events: none;
+                    color: #FFFFFF; mix-blend-mode: difference; padding-top: 0.1em;
+                    font-size: clamp(96px, 16vw, 300px); font-weight: 500; line-height: 0.8; letter-spacing: -0.035em; white-space: nowrap; }
+    .hero-marquee .mq-track { animation-duration: 40s; will-change: transform; }
+    .hero-bottom { position: absolute; left: 24px; right: 24px; bottom: 22px; z-index: 2; display: flex; align-items: center;
+                   justify-content: space-between; color: #FFFFFF; mix-blend-mode: difference;
+                   font-family: "Geist Mono", ui-monospace, "SFMono-Regular", monospace; font-size: 13px; line-height: 18px;
+                   text-transform: uppercase; letter-spacing: 0.02em; }
+    @media (max-width: 759px) {
+      /* Fade the top of the photo so the brandmark never sits on the hair */
+      .hero-img { object-position: 50% 0%; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 72px); mask-image: linear-gradient(to bottom, transparent 0, #000 72px); }
+      .hero-marquee { font-size: 28vw; bottom: 56px; }
+    }
+
+    /* Brandmark hover */
+    .bm { display: flex; width: fit-content; transform-origin: left center;
+          transition: transform .35s cubic-bezier(.22, 1, .36, 1); }
+    .bm:hover, .bm:focus-visible { transform: scale(1.12); }
+
+    /* Slot-machine roll: --lh is the line height of the link */
+    .roll { --lh: 22px; }
+    .roll .w { display: inline-flex; overflow: hidden; height: var(--lh); line-height: var(--lh); }
+    .roll .l { display: inline-block; text-shadow: 0 var(--lh) 0 currentColor;
+               transition: transform .45s cubic-bezier(.65, 0, .35, 1); transition-delay: calc(var(--i) * 25ms); }
+    .roll:hover .l, .roll:focus-visible .l { transform: translateY(calc(var(--lh) * -1)); }
+
+    /* Projects: 10px frame and gaps */
+    .blocks { display: flex; flex-direction: column; gap: 10px; padding: 10px; }
+    .row { --p: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .tile { position: relative; display: block; overflow: hidden; aspect-ratio: 86 / 100; color: #0B0C0E; }
+    .tile.full { grid-column: 1 / -1; aspect-ratio: 157 / 100; }
+    .tile .bg { position: absolute; inset: 0; }
+    /* Scroll-linked: JS sets --p on each row (0 = centre, 1 = bottom), no transition */
+    .tile .info { position: absolute; left: 24px; right: 24px;
+                  top: calc(50% + (50% - 24px) * var(--p)); transform: translateY(calc(-50% - 50% * var(--p)));
+                  display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+    /* Photo tiles: name is hidden (the link keeps its aria-label) */
+    .tile.no-label .info { display: none; }
+    /* Blocks with a photo: image fills the background layer, text turns white */
+    .tile .bg img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .tile.has-img { color: #FFFFFF; }
+    /* Video block: fills the background layer; light labels over the black video */
+    .tile .bg video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; }
+    .tile.on-dark { color: #EEF5F7; }
+    .tile:focus-visible { outline: 1px solid #0B0C0E; outline-offset: 3px; }
+
+
+    /* Selected projects: two side by side, Shams full width below */
+    .pj { padding: max(140px, 11vw) 10px max(140px, 11vw); display: flex; flex-direction: column; gap: 56px; }
+    .pj-top { display: flex; justify-content: space-between; padding: 0 14px; font-size: 14px; line-height: 1.4; text-transform: uppercase; color: #6B6F78; margin-bottom: -28px; }
+    .pj-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; row-gap: 56px; }
+    .pj-i { display: block; color: #0B0C0E; text-decoration: none; }
+    .pj-img { position: relative; overflow: hidden; aspect-ratio: 86 / 100; background: #EEF0F4; }
+    .pj-full .pj-img { aspect-ratio: 157 / 100; }
+    .pj-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.6s cubic-bezier(.16, 1, .3, 1); will-change: transform; }
+    @media (hover: hover) { .pj-i:hover .pj-img img { transform: scale(1.04); } }
+    .pj-cap { display: flex; justify-content: space-between; gap: 16px; padding: 14px 14px 0; font-size: max(15px, 1.05vw); line-height: 1.3; text-transform: uppercase; }
+    .pj-cap b { font-weight: 500; }
+    .pj-cap span { color: #8A8E96; text-align: right; }
+    .pj-i:focus-visible { outline: 1px solid #0B0C0E; outline-offset: 3px; }
+    @media (max-width: 759px) { .pj-row { grid-template-columns: 1fr; } .pj-img, .pj-full .pj-img { aspect-ratio: 4 / 5; } .pj-cap { flex-direction: column; gap: 2px; } .pj-cap span { text-align: left; } }
+    @media (prefers-reduced-motion: reduce) { .pj-img img { transition: none; } }
+
+    /* "Voir tous les projets": 10px frame + 14px padding = 24px page edge */
+    .see-all { display: flex; align-items: center; justify-content: space-between; padding: 56px 14px 8px; margin-top: -10px; color: #0B0C0E; } /* cancel the 10px row gap */
+    .see-all-arrow { transition: transform .45s cubic-bezier(.65, 0, .35, 1); }
+    .see-all:hover .see-all-arrow, .see-all:focus-visible .see-all-arrow { transform: translateX(8px); }
+    @media (max-width: 759px) {
+      .row { grid-template-columns: 1fr; }
+      .tile, .tile.full { aspect-ratio: 4 / 5; }
+    }
+
+    /* Sections after the projects: 12-column grid; everything stacks under 900px */
+    .sec { padding: 160px 24px 0; }
+    .sec-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+    .sec-label, .col-1-3 { grid-column: 1 / 4; }
+    .col-1-4 { grid-column: 1 / 5; }
+    .sec-body, .col-5-12 { grid-column: 5 / 13; }
+    .col-7-12 { grid-column: 7 / 13; }
+    @media (max-width: 899px) {
+      .sec { padding-top: 96px; }
+      .sec-grid { grid-template-columns: 1fr; row-gap: 24px; }
+      .sec-label, .sec-body, .col-1-3, .col-1-4, .col-5-12, .col-7-12 { grid-column: 1 / -1; }
+    }
+
+    /* Outline button */
+    .btn-outline { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border: 1px solid #FFFFFF;
+                   font-size: 16px; line-height: 20px; transition: background-color .3s ease, color .3s ease; }
+    .btn-outline:hover, .btn-outline:focus-visible { background: #FFFFFF; color: #0B0C0E; }
+
+    /* Footer small text */
+    #contact .label { color: #5A5E66; }
+
+    /* Footer marquee: two identical groups, moving left to right */
+    .mq-track { display: flex; width: max-content; white-space: nowrap; animation: mq 55s linear infinite; }
+    .mq-dot { display: inline-block; width: 0.15em; height: 0.15em; border-radius: 50%; background: currentColor;
+              margin: 0 0.32em; vertical-align: middle; }
+    @keyframes mq { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+    /* Mobile menu */
+    .menu-mobile { opacity: 0; pointer-events: none; transition: opacity 300ms cubic-bezier(.22, 1, .36, 1); }
+    .menu-mobile.is-open { opacity: 1; pointer-events: auto; }
+
+    /* Custom cursor (mouse devices only, enabled by JS): a fast dot and a slow trailing disc layered above it */
+    .cursor-dot, .cursor-disc { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none;
+                                opacity: 0; transition: opacity .25s ease; will-change: transform; }
+    .cursor-dot { z-index: 60; width: 28px; height: 28px; margin: -14px 0 0 -14px; background: #FFFFFF; mix-blend-mode: difference; backface-visibility: hidden; }
+    .cursor-disc { z-index: 61; width: 30px; height: 30px; margin: -15px 0 0 -15px; background: #ADB0B7; mix-blend-mode: multiply; }
+    .cursor-dot.is-visible, .cursor-disc.is-visible { opacity: 1; }
+    html.has-dot, html.has-dot * { cursor: none !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .bm, .roll .l, .btn-outline, .menu-mobile, .hdr, .see-all-arrow { transition: none; }
+      .mq-track { animation: none; }
+    }
+  </style>
+  <link rel="stylesheet" href="site-nav.css">
+  <link rel="stylesheet" href="reveal.css">
+</head>
+
+<body class="bg-[#FFFFFF] text-ink font-sans">
+  <!-- Logo sprite: path copied from brandmark.svg -->
+  <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+    <symbol id="brandmark" viewBox="362 334 276 294">
+      <path d="M628.1,609.86c-16.04,6.18-31.49,6.99-46.98,2.74-15.17-4.16-24.13-16.37-26.87-32.52-36,35.71-101.73,49.67-146.49,25.61-21.83-11.73-32.89-32.18-35.4-56.47-3.71-35.81,15.36-68.65,50.03-80.61,11.93-4.12,24.67-6.8,37.57-8.45l75.63-9.66c12.18-1.56,17.75-12.11,19.17-23.02,2.37-18.21-5.64-33.93-23.88-40.39-19.79-7.01-42.97-7.24-64.06-3.08-23.06,4.55-36.5,23.29-38.53,46.98l-42.22.08c-.98-29.23,11.3-55.99,36.15-70.68,20.46-12.09,43.12-14.83,66.57-15.8,27.86-1.15,54.79,2.72,77.79,17.82,23.47,15.41,34.41,39.34,31.38,66.94-3.06,27.91-21,48.75-49.26,54.39-22.53,4.5-45.29,7.72-68.47,10.94-13.41,1.86-26.64,4.03-38.48,9.41-17.22,7.82-24.08,23.63-21.33,41.54,2.74,17.85,14.44,30.64,32.74,33.42,37.57,5.72,89.05-10.09,98.18-53.29l46.8-.56.26,39.51c.02,3.27,1.51,9.65,3.8,11.49,2.46,1.97,8.17,2.99,11.55,2.89l14.28-.42.06,31.18Z"/>
+    </symbol>
+  </svg>
+
+  <!-- Fixed header -->
+  <header class="site-header hdr fixed top-0 inset-x-0 z-50 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 px-6 py-5">
+    <a href="#top" class="bm justify-self-start" aria-label="Salim Azmi, accueil">
+      <svg class="block h-11 w-auto aspect-[276/294]" fill="currentColor" aria-hidden="true"><use href="#brandmark"/></svg>
+    </a>
+    <nav class="hidden min-[760px]:block" aria-label="Menu principal">
+      <ul class="flex items-center gap-3.5 text-base leading-[22px]">
+        <li><a class="roll" href="#top">Accueil</a></li>
+        <li><a class="roll" href="projets.html">Projets</a></li>
+        <li><a class="roll" href="#a-propos">À propos</a></li>
+      </ul>
+    </nav>
+    <div class="col-start-3 justify-self-end text-base leading-[22px]">
+      <a class="roll hidden min-[760px]:inline-block" href="contact.html">Parlons-en</a>
+      <button type="button" class="min-[760px]:hidden" aria-expanded="false" aria-controls="menu-mobile" data-menu-toggle>Menu</button>
+    </div>
+  </header>
+
+  <!-- Mobile menu (outside the blended header so it stays solid black) -->
+  <div id="menu-mobile" class="menu-mobile fixed inset-0 z-[55] bg-ink text-white min-[760px]:hidden flex flex-col px-6 py-5" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="grid grid-cols-[1fr_auto_1fr] items-center">
+      <svg class="block h-11 w-auto aspect-[276/294]" fill="currentColor" aria-hidden="true"><use href="#brandmark"/></svg>
+      <button type="button" class="text-base leading-[22px]" data-menu-close>Fermer</button>
+      <span></span>
+    </div>
+    <nav class="flex-1 flex items-end pb-1" aria-label="Menu mobile">
+      <ul class="text-5xl leading-[1.1] tracking-[-0.03em] font-medium">
+        <li><a href="#top">Accueil</a></li>
+        <li><a href="projets.html">Projets</a></li>
+        <li><a href="#a-propos">À propos</a></li>
+        <li><a href="contact.html">Parlons-en</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- main sits above the sticky footer; its black background keeps the footer hidden until main scrolls away -->
+  <main class="relative z-[1] bg-[#FFFFFF]">
+    <!-- Hero: full-screen photo anchored to the top, so the head is never cropped -->
+    <section id="top" class="hero2 ed" aria-label="Introduction">
+      <p class="h2-l">Designer de marque &amp; web indépendant</p>
+      <a class="h2-r" href="mailto:hello@salimazmi.com">hello@salimazmi.com</a>
+      <img class="h2-photo" src="hero-cut.webp" width="1443" height="1600" alt="Portrait de Salim Azmi, de profil, en pull noir" fetchpriority="high" decoding="async">
+      <h1 class="h2-track" aria-label="Salim Azmi, designer de marque et web">
+        <div class="h2-row" aria-hidden="true"><span class="h2-g"><span class="h2-name">Salim Azmi</span><span class="h2-mark" aria-hidden="true">SA</span><span class="h2-name">Salim Azmi</span><span class="h2-mark" aria-hidden="true">SA</span></span><span class="h2-g"><span class="h2-name">Salim Azmi</span><span class="h2-mark" aria-hidden="true">SA</span><span class="h2-name">Salim Azmi</span><span class="h2-mark" aria-hidden="true">SA</span></span></div>
+      </h1>
+    </section>
+
+    <!-- Everything below slides over the sticky hero -->
+    <div class="relative z-[1] bg-[#FFFFFF] ed">
+      <div class="ed-intro" id="a-propos">
+        <h2>Design d'identité &amp; sites web pour les marques en pleine ascension.</h2>
+        <div class="ed-intro-mid">
+          <p>Je façonne des marques : des stratégies cohérentes et des expériences qui relient les entreprises à leur public.</p>
+          <!-- Placeholder figures: replace with your real numbers -->
+          <ul class="ed-stats">
+            <li><b>5<i>+</i></b>années d'expérience</li>
+            <li><b>20<i>+</i></b>clients</li>
+            <li><b>50<i>+</i></b>projets</li>
+          </ul>
+        </div>
+        <ul class="ed-acc">
+          <li><button type="button" aria-expanded="false"><span>Stratégie de marque</span><span class="pl" aria-hidden="true"></span></button><div class="pn"><div><p>Positionnement, ton de voix et plateforme de marque : les bases solides avant de dessiner quoi que ce soit.</p></div></div></li>
+          <li><button type="button" aria-expanded="false"><span>Identité visuelle</span><span class="pl" aria-hidden="true"></span></button><div class="pn"><div><p>Logo, couleurs, typographie et univers graphique, livrés avec une charte claire et facile à appliquer.</p></div></div></li>
+          <li><button type="button" aria-expanded="false"><span>Supports imprimés</span><span class="pl" aria-hidden="true"></span></button><div class="pn"><div><p>Papeterie, brochures, catalogues et packaging : la marque, au toucher comme à l'écran.</p></div></div></li>
+          <li><button type="button" aria-expanded="false"><span>Sites web &amp; boutiques en ligne</span><span class="pl" aria-hidden="true"></span></button><div class="pn"><div><p>Sites sur mesure, Shopify, WordPress, Webflow : rapides, simples à mettre à jour et fidèles à votre image.</p></div></div></li>
+        </ul>
+      </div>
+
+
+
+      <section class="pj" id="projets" aria-label="Projets choisis">
+        <div class="pj-row">
+          <a class="pj-i" href="projets/zenith/">
+            <div class="pj-img"><img src="projets/zenith/assets/img/card.webp" width="1440" height="1929" alt="Page d'accueil mobile de zenith® sur un téléphone tenu en main devant un canapé vert" loading="lazy" decoding="async"></div>
+            <div class="pj-cap"><b>zenith®</b><span>Fiduciaire, Identité visuelle, Motion</span></div>
+          </a>
+          <a class="pj-i" href="projets/benjelloun-associes/">
+            <div class="pj-img"><img src="projets/benjelloun-associes/assets/img/card.webp" width="1440" height="1929" alt="Papeterie Benjelloun &amp; Associés en bleu nuit" loading="lazy" decoding="async"></div>
+            <div class="pj-cap"><b>Benjelloun &amp; Associés</b><span>Cabinet d'avocats, Identité visuelle, Motion</span></div>
+          </a>
+        </div>
+        <a class="pj-i pj-full" href="projets/shams/">
+          <div class="pj-img"><img src="projets/shams/assets/img/facade.webp" srcset="projets/shams/assets/img/facade-1440.webp 1440w, projets/shams/assets/img/facade.webp 2400w" sizes="100vw" width="2400" height="1528" alt="Enseigne Shams en lettres 3D sur la façade d'un immeuble, sous un ciel cobalt" loading="lazy" decoding="async"></div>
+          <div class="pj-cap"><b>Shams</b><span>Énergie solaire, Identité visuelle, Motion</span></div>
+        </a>
+      </section>
+
+      <ul class="ed-links" aria-label="Aller plus loin">
+        <li><a href="projets.html"><span>Voir tous les projets</span><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></a></li>
+        <li><a href="demarrer.html"><span>Démarrer un projet</span><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></a></li>
+        <li><a href="contact.html"><span>Me contacter</span><svg viewBox="0 0 28 14" aria-hidden="true"><path d="M0 7h26M20 1l6 6-6 6"/></svg></a></li>
+      </ul>
+
+      <!-- Placeholder reviews: replace with real names, roles, quotes and photos -->
+      <section id="avis" class="ed-rv" aria-label="Avis clients">
+        <h2 class="ed-h">Avis clients</h2>
+        <div class="ed-rule"></div>
+        <div class="ed-tabs" role="tablist" aria-label="Choisir un avis"><button type="button" role="tab" aria-selected="true" aria-controls="rev1" aria-label="Avis 1"><img src="projets/zenith/assets/img/card.webp" alt="" loading="lazy"></button><button type="button" role="tab" aria-selected="false" aria-controls="rev2" aria-label="Avis 2"><img src="projets/benjelloun-associes/assets/img/card.webp" alt="" loading="lazy"></button><button type="button" role="tab" aria-selected="false" aria-controls="rev3" aria-label="Avis 3"><img src="projets/zenith/assets/img/mugs-1440.webp" alt="" loading="lazy"></button><button type="button" role="tab" aria-selected="false" aria-controls="rev4" aria-label="Avis 4"><img src="projets/benjelloun-associes/assets/img/facade-1440.webp" alt="" loading="lazy"></button><button type="button" role="tab" aria-selected="false" aria-controls="rev5" aria-label="Avis 5"><img src="projets/zenith/assets/img/notebook-1440.webp" alt="" loading="lazy"></button></div>
+        <figure id="rev1" class="ed-rev on" role="tabpanel">
+          <figcaption class="who">[Prénom Nom]<small>[Fondatrice] · [Entreprise], Casablanca</small></figcaption>
+          <blockquote>« Salim a compris notre univers dès le premier rendez-vous. Il nous a livré une identité claire et élégante, que nous utilisons chaque jour avec fierté. »</blockquote>
+          <div class="thumb"><img src="projets/zenith/assets/img/hero-1440.webp" alt="" loading="lazy" decoding="async"></div>
+        </figure>
+        <figure id="rev2" class="ed-rev" role="tabpanel">
+          <figcaption class="who">[Prénom Nom]<small>[Directeur] · [Entreprise], [Ville]</small></figcaption>
+          <blockquote>« Notre ancien site ne nous ressemblait plus. Salim l'a entièrement repensé : plus simple, plus rapide, et enfin facile à mettre à jour. »</blockquote>
+          <div class="thumb"><img src="projets/benjelloun-associes/assets/img/site-poster.webp" alt="" loading="lazy" decoding="async"></div>
+        </figure>
+        <figure id="rev3" class="ed-rev" role="tabpanel">
+          <figcaption class="who">[Prénom Nom]<small>[Directrice] · [Établissement], [Ville]</small></figcaption>
+          <blockquote>« Nous ouvrions au Maroc et tout restait à faire : logo, site, brochures. Salim a tout pris en charge avec une grande rigueur. »</blockquote>
+          <div class="thumb"><img src="projets/benjelloun-associes/assets/img/dossiers-badge-1440.webp" alt="" loading="lazy" decoding="async"></div>
+        </figure>
+        <figure id="rev4" class="ed-rev" role="tabpanel">
+          <figcaption class="who">[Prénom Nom]<small>[Gérant] · [Entreprise], [Ville]</small></figcaption>
+          <blockquote>« Un vrai regard de designer, et une écoute rare. Le résultat dépasse ce que nous avions imaginé, dans les délais annoncés. »</blockquote>
+          <div class="thumb"><img src="projets/zenith/assets/img/laptop-1440.webp" alt="" loading="lazy" decoding="async"></div>
+        </figure>
+        <figure id="rev5" class="ed-rev" role="tabpanel">
+          <figcaption class="who">[Prénom Nom]<small>[Fondatrice] · [Entreprise], [Ville]</small></figcaption>
+          <blockquote>« Collaboration fluide du début à la fin. Notre marque est enfin cohérente, sur le web comme sur le papier. »</blockquote>
+          <div class="thumb"><img src="projets/benjelloun-associes/assets/img/hero-1440.webp" alt="" loading="lazy" decoding="async"></div>
+        </figure>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="hf ed" id="contact">
+    <nav class="hf-pills" aria-label="Contact et liens">
+      <a href="mailto:hello@salimazmi.com">hello@salimazmi.com</a>
+      <a href="tel:+212600000000">+212 6 00 00 00 00</a>
+      <a href="https://wa.me/212XXXXXXXXX" target="_blank" rel="noopener">WhatsApp</a>
+      <span class="hf-br"></span>
+      <a href="demarrer.html">Démarrer un projet</a>
+      <a href="index.html">Accueil</a>
+      <a href="projets.html">Projets</a>
+      <a href="#a-propos">À propos</a>
+      <a href="contact.html">Contact</a>
+      <span class="hf-br"></span>
+      <a href="#" target="_blank" rel="noopener">Instagram</a>
+      <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#" target="_blank" rel="noopener">Behance</a>
+    </nav>
+    <div class="hf-sign">
+      <a class="hf-brand" href="index.html" aria-label="Salim Azmi, accueil">Salim Azmi</a>
+      <p class="hf-time"><span id="sf-clock">--:--:--</span><br>Casablanca, Maroc</p>
+    </div>
+  </footer>
+
+  <div class="cursor-disc" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <script>
+    (function () {
+      var el = document.getElementById("sf-clock"); if (!el) return;
+      function tick() {
+        try {
+          var f = new Intl.DateTimeFormat("fr-FR", { timeZone: "Africa/Casablanca", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZoneName: "shortOffset" });
+          var p = f.formatToParts(new Date()), g = function (t) { return (p.find(function (x) { return x.type === t; }) || {}).value || ""; };
+          el.textContent = g("hour") + ":" + g("minute") + ":" + g("second") + " " + g("timeZoneName").replace("UTC", "GMT");
+        } catch (e) { el.textContent = ""; }
+      }
+      tick(); setInterval(tick, 1000);
+    })();
+  </script>
+  <script>
+    (function () {
+      var items = document.querySelectorAll(".ed-item");
+      if (!("IntersectionObserver" in window)) { items.forEach(function (i) { i.classList.add("in"); }); return; }
+      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }); }, { rootMargin: "0px 0px -8% 0px" });
+      items.forEach(function (i) { io.observe(i); });
+      var tabs = document.querySelectorAll(".ed-tabs button");
+      tabs.forEach(function (t) { t.addEventListener("click", function () {
+        tabs.forEach(function (x) { x.setAttribute("aria-selected", x === t ? "true" : "false"); });
+        document.querySelectorAll(".ed-rev").forEach(function (r) { r.classList.toggle("on", r.id === t.getAttribute("aria-controls")); });
+      }); });
+    })();
+  </script>
+  <script>
+    (function () {
+      document.querySelectorAll(".ed-acc button").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var li = b.parentElement, open = !li.classList.contains("open");
+          li.classList.toggle("open", open); b.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+      });
+    })();
+  </script>
+  <script>
+    /* Count-up on the stats: runs once when the figures scroll into view */
+    (function () {
+      var items = document.querySelectorAll('.ed-stats b');
+      if (!items.length) return;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var data = [];
+      items.forEach(function (b) {
+        var node = b.firstChild;
+        if (!node || node.nodeType !== 3) return;
+        var target = parseInt(node.nodeValue, 10);
+        if (isNaN(target)) return;
+        b.style.fontVariantNumeric = 'tabular-nums';
+        var li = b.parentNode;
+        li.style.minWidth = li.getBoundingClientRect().width + 'px'; /* reserve the final width: no layout shift */
+        data.push({ node: node, target: target });
+        if (!reduce) node.nodeValue = '0';
+      });
+      if (reduce || !data.length) return;
+      function run() {
+        var dur = 1800, t0 = null;
+        function step(t) {
+          if (t0 === null) t0 = t;
+          var p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 4);
+          data.forEach(function (d) { d.node.nodeValue = String(Math.round(d.target * e)); });
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+      var list = document.querySelector('.ed-stats');
+      if (!('IntersectionObserver' in window)) { data.forEach(function (d) { d.node.nodeValue = String(d.target); }); return; }
+      var io = new IntersectionObserver(function (es) {
+        if (es[0].isIntersecting) { io.disconnect(); run(); }
+      }, { threshold: 0.4 });
+      io.observe(list);
+    })();
+  </script>
+  <script src="reveal.js" defer></script>
+    <script src="site.js"></script>
+</body>
+</html>
