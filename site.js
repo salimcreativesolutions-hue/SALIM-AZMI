@@ -2,6 +2,7 @@
 (function () {
   const base = (document.currentScript && document.currentScript.src || "").replace(/site\.js.*$/, "");
   const path = location.pathname.toLowerCase();
+  if (!/^\/?(index\.html)?$/.test(path)) document.documentElement.classList.add("sn-sub");
   const cur = /contact/.test(path) ? "contact" : /demarrer/.test(path) ? "demarrer" : /projets/.test(path) ? "projets" : "accueil";
   const items = [
     ["accueil", "Accueil", "index.html"],

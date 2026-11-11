@@ -50,6 +50,10 @@ body{-webkit-font-smoothing:antialiased}
   .sn-news{order:-1;flex:1;min-width:0;max-width:calc(100% - 96px);width:auto}
   .sn-menu{order:1;flex:none;height:32px;padding:0 16px;font-size:12px}
   .sn-news{height:32px;font-size:11px;border-radius:8px}
+  html.sn-sub .sn{top:calc(12px + env(safe-area-inset-top,0px));bottom:auto}
+  html.sn-sub .sn-news{order:0}
+  html.sn-sub .sn-menu{order:1}
+  html.sn-sub.sn-open .sn{transform:translateY(-12px)}
   html.sn-open .sn{opacity:0;transform:translateY(12px);pointer-events:none}
   /* top panel */
   .sn-ov{inset:0 0 auto 0;bottom:auto;height:auto;flex-direction:row;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 12px 20px;
