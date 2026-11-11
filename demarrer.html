@@ -387,7 +387,7 @@
         try {
           if (ENDPOINT.includes("VOTRE_ID")) throw new Error("Formspree ID missing");
           const res = await fetch(ENDPOINT, { method: "POST", body: data, headers: { Accept: "application/json" } });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          if (!res.ok) { let d = ""; try { d = JSON.stringify(await res.json()); } catch (_) {} throw new Error(`HTTP ${res.status} ${d}`); }
           thanks.querySelector("[data-first-name]").textContent = name.value.trim().split(/\s+/)[0];
           error.hidden = true;
           form.hidden = true;
@@ -396,7 +396,8 @@
           thanks.focus();
         } catch (err) {
           console.error(err);
-          showError("L'envoi n'a pas abouti. Réessayez dans un instant ou écrivez-moi directement par email.");
+          error.innerHTML = "L'envoi n'a pas abouti. Réessayez dans un instant ou <a class=\"underline\" target=\"_blank\" rel=\"noopener\" href=\"https://wa.me/212680863827\">écrivez-moi sur WhatsApp</a>.";
+          error.hidden = false;
         } finally {
           send.removeAttribute("aria-busy");
           send.firstElementChild.textContent = "Envoyer la demande";
