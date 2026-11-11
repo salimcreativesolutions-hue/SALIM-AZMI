@@ -385,9 +385,19 @@
         send.setAttribute("aria-busy", "true");
         send.firstElementChild.textContent = "Envoi…";
         try {
-          if (ENDPOINT.includes("VOTRE_ID")) throw new Error("Formspree ID missing");
-          const res = await fetch(ENDPOINT, { method: "POST", body: data, headers: { Accept: "application/json" } });
-          if (!res.ok) { let d = ""; try { d = JSON.stringify(await res.json()); } catch (_) {} throw new Error(`HTTP ${res.status} ${d}`); }
+          const payload = {
+            nom: name.value.trim(), entreprise: form.elements.entreprise.value.trim(),
+            services: data.get("services"), email: email.value.trim(), telephone: phone.value.trim()
+          };
+          let res;
+          try {
+            res = await fetch("/api/send", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+          } catch (_) { res = { ok: false }; }
+          if (!res.ok) {
+            // Backup route if the direct mail function is unavailable
+            res = await fetch(ENDPOINT, { method: "POST", body: data, headers: { Accept: "application/json" } });
+          }
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
           thanks.querySelector("[data-first-name]").textContent = name.value.trim().split(/\s+/)[0];
           error.hidden = true;
           form.hidden = true;
