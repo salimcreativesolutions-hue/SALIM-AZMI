@@ -57,7 +57,7 @@ body{-webkit-font-smoothing:antialiased}
   html.sn-open .sn{opacity:0;transform:translateY(12px);pointer-events:none}
   /* top panel */
   .sn-ov{inset:0 0 auto 0;bottom:auto;height:auto;flex-direction:row;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 12px 20px;
-    background:#fff;border-bottom:1px solid #E6E7EA;
+    background:transparent;border:0;box-shadow:none;
     -webkit-backdrop-filter:none;backdrop-filter:none;transform:translateY(-14px);
     transition:opacity .3s ease,transform .3s ease,visibility 0s linear .3s}
   .sn-ov.on{transform:none}
