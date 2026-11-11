@@ -1,0 +1,23 @@
+# Not part of the live site
+*.bak*
+_backup-*/
+_tmp-*
+*.zip
+*.tgz
+benjelloun-stylo-rotation-v2.mp4
+CLAUDE.md
+screenshot.mjs
+serve.mjs
+temporary screenshots/
+turntable-helmet/
+preview-images/
+hero-cut.webp
+hero-walk.webp
+hero-fig.webp
+hero-salim.jpg
+hero-salim.webp
+hero-salim3.jpg
+hero-salim3.webp
+portrait-salim.jpg
+.DS_Store
+node_modules/
