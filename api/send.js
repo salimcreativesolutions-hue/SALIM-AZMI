@@ -20,8 +20,8 @@ module.exports = async (req, res) => {
 
   const nom = clean(b.nom, 120), entreprise = clean(b.entreprise, 160), services = clean(b.services, 300);
   const email = clean(b.email, 200), telephone = clean(b.telephone, 60);
-  if (!nom || (!email && !telephone)) return res.status(400).json({ ok: false, error: "invalid" });
   const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!nom || !validEmail) return res.status(400).json({ ok: false, error: "invalid" });
 
   const rows = [["Nom", nom], ["Entreprise", entreprise || "—"], ["Besoin", services || "—"], ["Email", email || "—"], ["Téléphone", telephone || "—"]];
   const text = rows.map(([k, v]) => `${k} : ${v}`).join("\n");

@@ -327,7 +327,8 @@
       addEventListener("resize", sizeAll);
       sizeAll();
 
-      const isReady = () => name.value.trim() !== "" && (email.value.trim() !== "" || phone.value.trim() !== "");
+      const validEmail = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+      const isReady = () => name.value.trim() !== "" && validEmail();
       const refresh = () => {
         send.classList.toggle("ready", isReady());
         if (isReady()) error.hidden = true;
@@ -349,7 +350,7 @@
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (!isReady()) {
-          showError("Indiquez votre nom et un email ou un numéro pour que je puisse vous répondre.");
+          showError(name.value.trim() === "" ? "Indiquez votre nom pour que je puisse vous répondre." : "Indiquez une adresse email valide pour que je puisse vous répondre.");
           (name.value.trim() === "" ? name : email).focus();
           return;
         }
